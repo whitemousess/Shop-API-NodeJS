@@ -1,0 +1,27 @@
+{
+  "name": "shop-nodejs",
+  "version": "1.0.0",
+  "description": "API SHOP",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whitemousess/Shop-nodeJS.git"
+  },
+  "author": "ngoc thang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whitemousess/Shop-nodeJS/issues"
+  },
+  "homepage": "https://github.com/whitemousess/Shop-nodeJS#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

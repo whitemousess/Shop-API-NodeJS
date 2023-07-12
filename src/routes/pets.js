@@ -1,19 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-const DogController = require('../controllers/DogController');
-const CatController = require('../controllers/CatController');
+const checkLogin = require('../middleware/login')
+const PetController = require('../controllers/PetController');
+
+// get all pets
+router.get('/show', PetController.GetAllPet)
 
 // Dogs
-router.get('/dogs',DogController.DogPets)
-router.post('/dogs/add',DogController.create)
-router.put('/dogs/:id/edit',DogController.edit)
-router.delete('/dogs/:id/delete',DogController.delete)
+router.get('/dogs',PetController.DogPets)
+router.post('/dogs/add',checkLogin,PetController.DogCreate)
+router.put('/dogs/:id/edit',checkLogin,PetController.DogEdit)
+router.delete('/dogs/:id/delete',checkLogin,PetController.DogDelete)
 
 // Cats
-router.get('/cats',CatController.CatPets)
-router.post('/cats/add',CatController.create)
-router.put('/cats/:id/edit',CatController.edit)
-router.delete('/cats/:id/delete',CatController.delete)
+router.get('/cats',PetController.CatPets)
+router.post('/cats/add',checkLogin,PetController.CatCreate)
+router.put('/cats/:id/edit',checkLogin,PetController.CatEdit)
+router.delete('/cats/:id/delete',checkLogin,PetController.CatDelete)
 
 module.exports = router;

@@ -4,11 +4,11 @@ const AuthModel = require('../models/AuthModel')
 module.exports = function checkLogin(req, res, next) {
   try {
     const authorizationHeader = req.headers['authorization']
-    const token = authorizationHeader.split(' ')[1]
+    const token = authorizationHeader && authorizationHeader.split(' ')[1]
     if (!token) res.status(403)
 
     jwt.verify(token, "pets" ,(err,data) => {
-      console.log(err, data)
+      // console.log(err, data)
       AuthModel
         .findOne({ _id: data._id })
         .then((account) => {

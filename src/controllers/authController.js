@@ -9,6 +9,10 @@ class authController {
     });
   }
 
+  currentUser(req, res, next) {
+    res.json({data: req.account});
+  }
+
   // handle login
   login(req, res, next) {
     const { username, password } = req.body;

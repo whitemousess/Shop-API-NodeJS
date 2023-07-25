@@ -6,6 +6,7 @@ const auth = new schema({
     username: {type: String},
     password: {type: String},
     roles: {type: Number},
+    avatar: {type: String}
 },
 {
     timestamps: true,

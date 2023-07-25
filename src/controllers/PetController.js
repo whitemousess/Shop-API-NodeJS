@@ -8,7 +8,6 @@ class CatController {
     let page = req.query.page;
     let params = [];
     let objWhere = {};
-    let type = {};
 
     // paging
     params.per_page = PAGE_SIZE;
@@ -31,6 +30,13 @@ class CatController {
         res.json({ data: pets });
       });
     
+  }
+
+  GetPet(req,res,next) {
+    PetModel.findOne({ _id: req.params.id })
+      .then((pets) => {
+        res.json({ data: pets });
+      });
   }
 
   PetCreate(req, res, next) {

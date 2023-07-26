@@ -29,14 +29,12 @@ class CatController {
       .then((pets) => {
         res.json({ data: pets });
       });
-    
   }
 
-  GetPet(req,res,next) {
-    PetModel.findOne({ _id: req.params.id })
-      .then((pets) => {
-        res.json({ data: pets });
-      });
+  GetPet(req, res, next) {
+    PetModel.findOne({ _id: req.params.id }).then((pets) => {
+      res.json({ data: pets });
+    });
   }
 
   PetCreate(req, res, next) {

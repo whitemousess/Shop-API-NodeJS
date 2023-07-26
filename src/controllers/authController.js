@@ -10,7 +10,7 @@ class authController {
   }
 
   currentUser(req, res, next) {
-    res.json({data: req.account});
+    res.json({ data: req.account });
   }
 
   // handle login
@@ -41,12 +41,25 @@ class authController {
   // handle register
   register(req, res, next) {
     req.body.role = 1;
-    const account = new authModel(req.body);
-    account
-      .save()
-      .then((account) => {
-        res.status(201).json({ data: account });
-      })
+    const { username } = req.body;
+    authModel.findOne({ username }).then((account) => {
+      if(account) {
+          res.status(409).json({ message: "username already taken" });
+      }else {
+          const account = new authModel(req.body);
+           account
+            .save()
+            .then((account) => {
+              res.status(201).json({ data: account });
+            })
+            .catch(next);
+        }
+      });
+  }
+
+  currentEdit(req,res, next) {
+    authModel.updateOne({_id: req.account._id},req.body)
+    .then((account) => res.json({ data: account }))
       .catch(next);
   }
 }

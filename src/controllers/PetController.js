@@ -1,34 +1,37 @@
 const PetModel = require("../models/PetModel");
 
 class CatController {
-  // task get all the pets
-  GetAllPet(req, res, next) {
-    // paging
-    let PAGE_SIZE = req.query.per_page;
-    let page = req.query.page;
+  GetPage(req, res, next) {
     let params = [];
     let objWhere = {};
+    const { page } = req.query;
+    const currentPage = parseInt(page) || 1;
+    const itemsPerPage = 5;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
 
-    // paging
-    params.per_page = PAGE_SIZE;
-    params.page = page;
     params.q = req.query.q;
     params.type = req.query.type;
-
-    page = parseInt(page);
-    var sotrangboqua = (page - 1) * PAGE_SIZE;
 
     // search for items
     if (params.q !== "") objWhere.name = new RegExp(params.q, "i");
     if (params.type !== "") objWhere.type = new RegExp(params.type, "i");
 
+
     PetModel.find(objWhere)
-      .sort({ _id: -1 })
-      .skip(sotrangboqua)
-      .limit(PAGE_SIZE)
-      .then((pets) => {
-        res.json({ data: pets });
+    .sort({ _id: -1 })
+    .then((pets) => {
+      const items = pets.slice(startIndex, endIndex);
+      const totalItems = pets.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
+      res.json({
+        data: items,
+        currentPage,
+        totalPages,
       });
+    });
+
   }
 
   GetPet(req, res, next) {

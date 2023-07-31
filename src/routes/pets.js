@@ -6,7 +6,7 @@ const checkLogin = require('../middleware/login')
 const PetController = require('../controllers/PetController');
 
 // get pets
-router.get('/show',PetController.GetAllPet)
+router.get('/show',PetController.GetPage)
 router.get('/show/:id',PetController.GetPet)
 
 // Dogs

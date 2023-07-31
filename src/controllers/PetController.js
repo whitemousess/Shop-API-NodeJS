@@ -38,6 +38,7 @@ class CatController {
   }
 
   PetCreate(req, res, next) {
+    req.body.image = req.file.path;
     const pets = new PetModel(req.body);
     pets
       .save()
@@ -46,9 +47,19 @@ class CatController {
   }
 
   PetEdit(req, res, next) {
-    PetModel.updateOne({ _id: req.params.id }, req.body)
-      .then((pets) => res.json({ data: pets }))
-      .catch(next);
+    if (!req.file) {
+      PetModel.findOne({ _id: req.params.id }).then((data) => {
+        req.body.image = data.image;
+        PetModel.updateOne({ _id: req.params.id }, req.body)
+          .then((pet) => res.json({ data: pet }))
+          .catch(next);
+      });
+    } else {
+      req.body.image = req.file.path;
+      PetModel.updateOne({ _id: req.params.id }, req.body)
+        .then((pet) => res.json({ data: pet }))
+        .catch(next);
+    }
   }
 
   PetDelete(req, res, next) {

@@ -43,24 +43,34 @@ class authController {
     req.body.role = 1;
     const { username } = req.body;
     authModel.findOne({ username }).then((account) => {
-      if(account) {
-          res.status(409).json({ message: "username already taken" });
-      }else {
-          const account = new authModel(req.body);
-           account
-            .save()
-            .then((account) => {
-              res.status(201).json({ data: account });
-            })
-            .catch(next);
-        }
-      });
+      if (account) {
+        res.status(409).json({ message: "username already taken" });
+      } else {
+        const account = new authModel(req.body);
+        account
+          .save()
+          .then((account) => {
+            res.status(201).json({ data: account });
+          })
+          .catch(next);
+      }
+    });
   }
 
-  currentEdit(req,res, next) {
-    authModel.updateOne({_id: req.account._id},req.body)
-    .then((account) => res.json({ data: account }))
-      .catch(next);
+  currentEdit(req, res, next) {
+    if (!req.file) {
+      req.body.avatar = req.account.avatar;
+      authModel
+        .updateOne({ _id: req.account._id }, req.body)
+        .then((account) => res.json({ data: account }))
+        .catch(next);
+    } else {
+      req.body.avatar = req.file.path;
+      authModel
+        .updateOne({ _id: req.account._id }, req.body)
+        .then((account) => res.json({ data: account }))
+        .catch(next);
+    }
   }
 }
 

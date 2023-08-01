@@ -4,9 +4,9 @@ class CatController {
   GetPage(req, res, next) {
     let params = [];
     let objWhere = {};
-    const { page } = req.query;
+    const { page ,per_page} = req.query;
     const currentPage = parseInt(page) || 1;
-    const itemsPerPage = 5;
+    const itemsPerPage = per_page;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 

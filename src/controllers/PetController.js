@@ -6,7 +6,7 @@ class CatController {
     let objWhere = {};
     const { page ,per_page} = req.query;
     const currentPage = parseInt(page) || 1;
-    const itemsPerPage = per_page;
+    const itemsPerPage =  per_page;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 

@@ -4,9 +4,9 @@ class CatController {
   GetPage(req, res, next) {
     let params = [];
     let objWhere = {};
-    const { page ,per_page} = req.query;
+    const { page, per_page } = req.query;
     const currentPage = parseInt(page) || 1;
-    const itemsPerPage =  per_page;
+    const itemsPerPage = per_page;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
@@ -17,21 +17,19 @@ class CatController {
     if (params.q !== "") objWhere.name = new RegExp(params.q, "i");
     if (params.type !== "") objWhere.type = new RegExp(params.type, "i");
 
-
     PetModel.find(objWhere)
-    .sort({ _id: -1 })
-    .then((pets) => {
-      const items = pets.slice(startIndex, endIndex);
-      const totalItems = pets.length;
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
-      res.json({
-        data: items,
-        currentPage,
-        totalPages,
-      });
-    });
+      .sort({ _id: -1 })
+      .then((pets) => {
+        const items = pets.slice(startIndex, endIndex);
+        const totalItems = pets.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+        res.json({
+          data: items,
+          currentPage,
+          totalPages,
+        });
+      });
   }
 
   GetPet(req, res, next) {
@@ -68,7 +66,7 @@ class CatController {
   PetDelete(req, res, next) {
     PetModel.deleteOne({ _id: req.params.id })
       .then((pets) => res.json({ data: pets }))
-      .catch(next);
+      .catch((error) => res.json({ error: error }));
   }
 }
 

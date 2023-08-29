@@ -12,8 +12,10 @@ const auth = new schema(
       ],
     },
     username: { type: String, trim: true, minLength: 2, maxLength: 100 },
+    firstName: { type: String},
+    lastName: { type: String},
     password: { type: String },
-    roles: { type: Number },
+    role: { type: Number },
     avatar: { type: String },
   },
   {

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const checkLogin = require('../middleware/login')
+const checkLogin = require('../middleware/Login')
 const shopController = require("../controllers/ShopController");
 
 router.get("/get-to-card", checkLogin, shopController.getToCard);

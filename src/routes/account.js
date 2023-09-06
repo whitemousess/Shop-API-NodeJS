@@ -3,7 +3,7 @@ const router = express.Router();
 
 const upload = require('../middleware/upload');
 const authController = require('../controllers/authController')
-const checkLogin = require('../middleware/login')
+const checkLogin = require('../middleware/Login')
 
 // get all account
 router.get('/getall', authController.getAll)

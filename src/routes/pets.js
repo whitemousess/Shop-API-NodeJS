@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const upload = require('../middleware/upload');
-const checkLogin = require('../middleware/login')
+const checkLogin = require('../middleware/Login')
 const PetController = require('../controllers/PetController');
 
 // get pets

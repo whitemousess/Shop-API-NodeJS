@@ -1,34 +1,38 @@
 const PetModel = require("../models/PetModel");
 
 class CatController {
-  GetPage(req, res, next) {
-    let params = [];
-    let objWhere = {};
-    const { page, per_page } = req.query;
-    const currentPage = parseInt(page) || 1;
-    const itemsPerPage = per_page;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+  GetPage(req, res) {
+    const { page, per_page, q, type } = req.query;
 
-    params.q = req.query.q;
-    params.type = req.query.type;
+    const objWhere = {};
 
-    // search for items
-    if (params.q !== "") objWhere.name = new RegExp(params.q, "i");
-    if (params.type !== "") objWhere.type = new RegExp(params.type, "i");
+    // Kiểm tra và áp dụng các điều kiện tìm kiếm nếu có
+    if (q) objWhere.name = new RegExp(q, "i");
+    if (type) objWhere.type = new RegExp(type, "i");
 
     PetModel.find(objWhere)
       .sort({ _id: -1 })
       .then((pets) => {
-        const items = pets.slice(startIndex, endIndex);
+        const currentPage = parseInt(page) || 1;
+        const itemsPerPage = parseInt(per_page) || pets.length; // Giá trị mặc định là 10
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        
         const totalItems = pets.length;
         const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        // Giới hạn dữ liệu dựa trên trang và số lượng mục trên mỗi trang
+        const items = pets.slice(startIndex, endIndex);
 
         res.json({
           data: items,
           currentPage,
           totalPages,
         });
+      })
+      .catch((error) => {
+        console.error("Lỗi trong quá trình truy vấn dữ liệu: ", error);
+        res.status(500).json({ error: "Đã xảy ra lỗi trong quá trình truy vấn dữ liệu." });
       });
   }
 

@@ -3,7 +3,6 @@ const PetModel = require("../models/PetModel");
 class CatController {
   GetPage(req, res) {
     const { page, per_page, q, type } = req.query;
-
     const objWhere = {};
 
     // Kiểm tra và áp dụng các điều kiện tìm kiếm nếu có
@@ -17,7 +16,7 @@ class CatController {
         const itemsPerPage = parseInt(per_page) || pets.length; // Giá trị mặc định là 10
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        
+
         const totalItems = pets.length;
         const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -32,7 +31,9 @@ class CatController {
       })
       .catch((error) => {
         console.error("Lỗi trong quá trình truy vấn dữ liệu: ", error);
-        res.status(500).json({ error: "Đã xảy ra lỗi trong quá trình truy vấn dữ liệu." });
+        res
+          .status(500)
+          .json({ error: "Đã xảy ra lỗi trong quá trình truy vấn dữ liệu." });
       });
   }
 

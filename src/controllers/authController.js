@@ -60,17 +60,25 @@ class authController {
   currentEdit(req, res, next) {
     if (!req.file) {
       req.body.avatar = req.account.avatar;
-      authModel
-        .updateOne({ _id: req.account._id }, req.body)
-        .then((account) => res.json({ data: account }))
-        .catch(next);
     } else {
       req.body.avatar = req.file.path;
-      authModel
-        .updateOne({ _id: req.account._id }, req.body)
-        .then((account) => res.json({ data: account }))
-        .catch(next);
     }
+    
+    authModel
+      .updateOne({ _id: req.account._id }, req.body)
+      .then(() => {
+        authModel.findOne({ _id: req.account._id })
+          .then((account) => {
+            if (!account) {
+              // Xử lý tài khoản không tồn tại
+              return res.status(404).json({ error: "Tài khoản không tồn tại" });
+            }
+            // Trả về tất cả thông tin vừa sửa
+            res.json({ data: account });
+          })
+          .catch(next);
+      })
+      .catch(next);
   }
 }
 

@@ -54,18 +54,14 @@ class CatController {
 
   PetEdit(req, res, next) {
     if (!req.file) {
-      PetModel.findOne({ _id: req.params.id }).then((data) => {
-        req.body.image = data.image;
-        PetModel.updateOne({ _id: req.params.id }, req.body)
-          .then((pet) => res.json({ data: pet }))
-          .catch(next);
-      });
+      req.body.image = data.image;
     } else {
       req.body.image = req.file.path;
-      PetModel.updateOne({ _id: req.params.id }, req.body)
-        .then((pet) => res.json({ data: pet }))
-        .catch(next);
     }
+    
+    PetModel.updateOne({ _id: req.params.id }, req.body)
+      .then((pet) => res.json({ data: pet }))
+      .catch(next);
   }
 
   PetDelete(req, res, next) {

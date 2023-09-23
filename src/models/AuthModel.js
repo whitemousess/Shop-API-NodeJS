@@ -17,6 +17,7 @@ const auth = new schema(
     password: { type: String },
     role: { type: Number },
     avatar: { type: String },
+    image_id: { type: String},
   },
   {
     timestamps: true,

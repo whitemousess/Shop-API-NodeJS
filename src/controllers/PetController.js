@@ -1,4 +1,5 @@
 const PetModel = require("../models/PetModel");
+const cloudinary = require("../config/db/cloudinary");
 
 class CatController {
   GetPage(req, res) {
@@ -44,7 +45,11 @@ class CatController {
   }
 
   PetCreate(req, res, next) {
-    req.body.image = req.file.path;
+    if (!req.file) {
+      req.body.image = null;
+    } else {
+      req.body.image = req.file.path;
+    }
     const pets = new PetModel(req.body);
     pets
       .save()
@@ -53,21 +58,37 @@ class CatController {
   }
 
   PetEdit(req, res, next) {
-    if (!req.file) {
-      req.body.image = data.image;
-    } else {
-      req.body.image = req.file.path;
-    }
-    
-    PetModel.updateOne({ _id: req.params.id }, req.body)
-      .then((pet) => res.json({ data: pet }))
-      .catch(next);
+    PetModel.findOne({ _id: req.params.id }).then((pet) => {
+      const image_id =
+        "pets" + pet.image.split("/upload/")[1].split("/pets")[1].split(".")[0];
+      if (pet) {
+        if (!req.file) {
+          req.body.image = pet.image;
+        } else {
+          req.body.image = req.file.path;
+          cloudinary.uploader.destroy(image_id);
+        }
+        PetModel.updateOne({ _id: req.params.id }, req.body)
+          .then((pet) => res.json({ data: pet }))
+          .catch(next);
+      } else {
+        res.json({ error: "Not found" });
+      }
+    });
   }
 
   PetDelete(req, res, next) {
-    PetModel.deleteOne({ _id: req.params.id })
-      .then((pets) => res.json({ data: pets }))
-      .catch((error) => res.json({ error: error }));
+    PetModel.findOneAndDelete({ _id: req.params.id }).then((pet) => {
+      if (pet) {
+        const image_id =
+          "pets" +
+          pet.image.split("/upload/")[1].split("/pets")[1].split(".")[0];
+        cloudinary.uploader.destroy(image_id);
+        res.json({ data: pet });
+      } else {
+        res.json({ error: "Not found" });
+      }
+    });
   }
 }
 

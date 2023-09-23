@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-
 const authModel = require("../models/AuthModel");
+const cloudinary = require("../config/db/cloudinary");
 
 class authController {
   getAll(req, res, next) {
@@ -62,12 +62,16 @@ class authController {
       req.body.avatar = req.account.avatar;
     } else {
       req.body.avatar = req.file.path;
+      const image_id = req.body.avatar.split('/upload/')[1].split("/pets")[1].split('.')[0];
+      req.body.image_id = "pets" + image_id
+      cloudinary.uploader.destroy(req.account.image_id)
     }
-    
+
     authModel
       .updateOne({ _id: req.account._id }, req.body)
       .then(() => {
-        authModel.findOne({ _id: req.account._id })
+        authModel
+          .findOne({ _id: req.account._id })
           .then((account) => {
             if (!account) {
               // Xử lý tài khoản không tồn tại

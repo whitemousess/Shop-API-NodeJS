@@ -4,6 +4,7 @@ const PetModel = require("../models/PetModel");
 class ShopController {
   getToCard(req, res, next) {
     ShopModel.find({ id_User: req.account._id })
+      .populate("shop_product")
       .then((data) => res.json({ data: data }))
       .catch(next);
   }
